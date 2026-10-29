@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - NovaStore{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 rounded-4 shadow-sm bg-white p-4 p-md-5">
+        <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+          <div class="brand-icon" style="width: 54px; height: 54px; font-size: 1.6rem;">
+            <i class="bi bi-person-circle"></i>
+          </div>
+          <div>
+            <h2 class="fw-bold mb-0">{{ user.name }}</h2>
+            <span class="text-muted small">Account Type: <strong class="text-capitalize text-primary">{{ user.role }}</strong> | Registered since {{ user.created_at }}</span>
+          </div>
+        </div>
+
+        <form action="{{ url_for('profile') }}" method="POST">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="profile-name" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="profile-name" name="name" value="{{ user.name }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="profile-email" class="form-label">Email Address (Read-only)</label>
+              <input type="email" class="form-control bg-light" id="profile-email" value="{{ user.email }}" readonly disabled>
+            </div>
+
+            <div class="col-md-6">
+              <label for="profile-phone" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="profile-phone" name="phone" value="{{ user.phone or '' }}" placeholder="+1 555-0199">
+            </div>
+
+            <div class="col-12">
+              <label for="profile-address" class="form-label">Default Shipping Address</label>
+              <textarea class="form-control" id="profile-address" name="address" rows="3">{{ user.address or '' }}</textarea>
+            </div>
+
+            <!-- Password Change Section -->
+            <div class="col-12 mt-4 pt-3 border-top">
+              <h5 class="fw-bold mb-2">Change Password (Optional)</h5>
+              <p class="text-muted small mb-3">Leave blank if you do not want to change your password.</p>
+            </div>
+
+            <div class="col-md-6">
+              <label for="current_password" class="form-label">Current Password</label>
+              <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Verify current password">
+            </div>
+
+            <div class="col-md-6">
+              <label for="new_password" class="form-label">New Password</label>
+              <input type="password" class="form-control" id="new_password" name="new_password" minlength="6" placeholder="At least 6 characters">
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+            <a href="{{ url_for('orders') }}" class="btn btn-outline-secondary rounded-pill px-4">
+              <i class="bi bi-box-seam me-1"></i> View Order History
+            </a>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">
+              <i class="bi bi-check2-circle me-1"></i> Save Profile Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

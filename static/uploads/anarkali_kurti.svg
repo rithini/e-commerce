@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad_anarkali_kurti" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d31027" />
+      <stop offset="100%" stop-color="#ea384d" />
+    </linearGradient>
+    <linearGradient id="cardGrad_anarkali_kurti" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04" />
+    </linearGradient>
+    <filter id="glow_anarkali_kurti" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGrad_anarkali_kurti)" />
+
+  <!-- Ambient Glow -->
+  <circle cx="90" cy="90" r="110" fill="#ffd200" opacity="0.22" filter="url(#glow_anarkali_kurti)" />
+  <circle cx="320" cy="310" r="130" fill="#ffffff" opacity="0.1" filter="url(#glow_anarkali_kurti)" />
+
+  <!-- Central Card Backdrop -->
+  <rect x="40" y="40" width="320" height="320" rx="28" fill="url(#cardGrad_anarkali_kurti)" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.25" />
+
+  <!-- Category Tag -->
+  <rect x="65" y="65" width="115" height="26" rx="13" fill="#ffffff" opacity="0.18" />
+  <text x="122" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">FASHION</text>
+
+  <!-- Product Icon Graphic -->
+  <g>
+    
+            <path d="M160 120 L185 145 L200 135 L215 145 L240 120 L255 160 L235 170 L280 270 L120 270 L165 170 L145 160 Z" fill="#ffd200" stroke="#ffffff" stroke-width="4"/>
+            <circle cx="200" cy="170" r="10" fill="#d31027"/>
+            <circle cx="200" cy="205" r="10" fill="#d31027"/>
+            <circle cx="200" cy="240" r="10" fill="#d31027"/>
+        
+  </g>
+
+  <!-- Product Title Bar -->
+  <text x="200" y="325" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">Floral Anarkali Kurti</text>
+</svg>

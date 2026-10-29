@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad_smart_watch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f1c2c" />
+      <stop offset="100%" stop-color="#928dab" />
+    </linearGradient>
+    <linearGradient id="cardGrad_smart_watch" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04" />
+    </linearGradient>
+    <filter id="glow_smart_watch" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGrad_smart_watch)" />
+
+  <!-- Ambient Glow -->
+  <circle cx="90" cy="90" r="110" fill="#a8ff78" opacity="0.22" filter="url(#glow_smart_watch)" />
+  <circle cx="320" cy="310" r="130" fill="#ffffff" opacity="0.1" filter="url(#glow_smart_watch)" />
+
+  <!-- Central Card Backdrop -->
+  <rect x="40" y="40" width="320" height="320" rx="28" fill="url(#cardGrad_smart_watch)" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.25" />
+
+  <!-- Category Tag -->
+  <rect x="65" y="65" width="115" height="26" rx="13" fill="#ffffff" opacity="0.18" />
+  <text x="122" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">ELECTRONICS</text>
+
+  <!-- Product Icon Graphic -->
+  <g>
+    
+            <rect x="175" y="90" width="50" height="220" rx="12" fill="#374151"/>
+            <rect x="150" y="150" width="100" height="100" rx="20" fill="#111827" stroke="#a8ff78" stroke-width="4"/>
+            <text x="200" y="195" font-family="Arial" font-size="20" fill="#a8ff78" text-anchor="middle" font-weight="bold">10:08</text>
+            <text x="200" y="220" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">7,420 STEPS</text>
+        
+  </g>
+
+  <!-- Product Title Bar -->
+  <text x="200" y="325" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">Noise ColorFit Pulse</text>
+</svg>

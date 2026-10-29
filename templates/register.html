@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - NovaStore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="auth-card">
+        <!-- Header -->
+        <div class="text-center mb-4">
+          <div class="brand-icon mx-auto mb-3" style="width: 48px; height: 48px; font-size: 1.4rem;">
+            <i class="bi bi-person-plus-fill"></i>
+          </div>
+          <h2 class="fw-bold mb-1">Create Customer Account</h2>
+          <p class="text-muted small">Register to start adding products to cart and placing orders.</p>
+        </div>
+
+        <!-- Registration Form -->
+        <form action="{{ url_for('register') }}" method="POST" class="needs-validation" novalidate id="register-form">
+          <div class="row g-3">
+            <!-- Full Name -->
+            <div class="col-12">
+              <label for="register-name" class="form-label">Full Name *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                <input type="text" class="form-control" id="register-name" name="name" value="{{ name if name else '' }}" required placeholder="e.g. Alice Smith">
+                <div class="invalid-feedback">Please enter your full name.</div>
+              </div>
+            </div>
+
+            <!-- Email Address -->
+            <div class="col-12">
+              <label for="register-email" class="form-label">Email Address *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                <input type="email" class="form-control" id="register-email" name="email" value="{{ email if email else '' }}" required placeholder="e.g. alice@example.com">
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="col-md-6">
+              <label for="register-password" class="form-label">Password *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-key"></i></span>
+                <input type="password" class="form-control" id="register-password" name="password" minlength="6" required placeholder="Min 6 characters">
+                <div class="invalid-feedback">Password must be at least 6 characters.</div>
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="col-md-6">
+              <label for="register-confirm-password" class="form-label">Confirm Password *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-check2-circle"></i></span>
+                <input type="password" class="form-control" id="register-confirm-password" name="confirm_password" minlength="6" required placeholder="Re-type password">
+                <div class="invalid-feedback">Please re-type your password.</div>
+              </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="col-12">
+              <label for="register-phone" class="form-label">Phone Number *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-telephone"></i></span>
+                <input type="tel" class="form-control" id="register-phone" name="phone" value="{{ phone if phone else '' }}" required placeholder="e.g. +1 555-0144">
+                <div class="invalid-feedback">Please provide your phone number.</div>
+              </div>
+            </div>
+
+            <!-- Shipping Address -->
+            <div class="col-12">
+              <label for="register-address" class="form-label">Default Shipping Address *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-geo-alt"></i></span>
+                <textarea class="form-control" id="register-address" name="address" rows="2" required placeholder="Street address, City, State, Postal Code">{{ address if address else '' }}</textarea>
+                <div class="invalid-feedback">Please provide your default shipping address.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 mt-4 shadow" id="btn-register-submit">
+            <i class="bi bi-check-lg me-2"></i> Register Account
+          </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center mt-4 pt-3 border-top">
+          <p class="small text-muted mb-0">
+            Already have an account? 
+            <a href="{{ url_for('login') }}" class="fw-bold text-primary text-decoration-none">Sign In Here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

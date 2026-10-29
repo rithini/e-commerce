@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00b4db" />
+      <stop offset="100%" stop-color="#0083b0" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGrad)" />
+
+  <!-- Ambient background glow circles -->
+  <circle cx="90" cy="90" r="110" fill="#bbf2f6" opacity="0.18" filter="url(#glow)" />
+  <circle cx="320" cy="310" r="130" fill="#ffffff" opacity="0.08" filter="url(#glow)" />
+
+  <!-- Central Card Backdrop -->
+  <rect x="40" y="40" width="320" height="320" rx="28" fill="url(#cardGrad)" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.2" />
+
+  <!-- Category Tag -->
+  <rect x="65" y="65" width="105" height="26" rx="13" fill="#ffffff" opacity="0.15" />
+  <text x="117" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">HOME & LIVING</text>
+
+  <!-- Product Icon Graphic -->
+  <g>
+    
+            <rect x="175" y="125" width="50" height="25" rx="6" fill="#37474f"/>
+            <rect x="185" y="115" width="30" height="12" rx="3" fill="#78909c"/>
+            <path d="M170 155 Q200 150 230 155 L230 270 Q230 280 200 280 Q170 280 170 270 Z" fill="#ffffff" opacity="0.9"/>
+            <rect x="180" y="180" width="40" height="70" rx="4" fill="#0083b0" opacity="0.3"/>
+            <circle cx="200" cy="215" r="10" fill="#00b4db"/>
+        
+  </g>
+
+  <!-- Product Title Bar -->
+  <text x="200" y="325" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">Insulated Water Bottle</text>
+</svg>

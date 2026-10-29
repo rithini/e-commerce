@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}NovaStore - Simple E-commerce Store{% endblock %}</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Custom Styling -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-glass sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('index') }}" id="nav-brand">
+        <div class="brand-icon">
+          <i class="bi bi-bag-heart-fill"></i>
+        </div>
+        <span>Nova<span class="text-primary">Store</span></span>
+      </a>
+
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-auto-close="outside" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}" id="nav-home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'products' and not request.args.get('category') %}active{% endif %}" href="{{ url_for('products') }}" id="nav-products">Catalog</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="nav-categories-dropdown">
+              Categories
+            </a>
+            <ul class="dropdown-menu border-0 shadow-lg rounded-3">
+              <li><a class="dropdown-menu-item dropdown-item py-2 fw-semibold" href="{{ url_for('products') }}">All Categories</a></li>
+              <li><hr class="dropdown-divider"></li>
+              {% for cat in global_categories %}
+              <li>
+                <a class="dropdown-item py-2" href="{{ url_for('products', category=cat) }}">
+                  {{ cat }}
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Search Bar -->
+        <form class="d-flex me-lg-3 my-2 my-lg-0" action="{{ url_for('products') }}" method="GET" role="search" id="navbar-search-form">
+          <div class="input-group">
+            <input class="form-control rounded-start-pill bg-light border-end-0 ps-3" type="search" name="q" placeholder="Search products..." aria-label="Search" value="{{ request.args.get('q', '') }}" id="nav-search-input">
+            <button class="btn btn-light rounded-end-pill border-start-0 text-muted px-3" type="submit" id="nav-search-submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- Right Side Nav Actions -->
+        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+          <!-- Shopping Cart Icon -->
+          <a href="{{ url_for('cart') }}" class="btn btn-light position-relative rounded-pill px-3 py-2 border shadow-sm" id="nav-cart-btn" title="View Cart">
+            <i class="bi bi-cart3 fs-5 text-dark"></i>
+            {% if cart_count > 0 %}
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" id="cart-counter-badge">
+              {{ cart_count }}
+            </span>
+            {% endif %}
+          </a>
+
+          <!-- User Authentication Dropdown -->
+          {% if current_user %}
+            <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle rounded-pill px-3 py-2 border shadow-sm fw-semibold d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="nav-user-dropdown">
+                <i class="bi bi-person-circle fs-5 text-primary"></i>
+                <span class="d-none d-sm-inline">{{ current_user.name }}</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2">
+                <li class="px-3 py-2 text-muted small border-bottom mb-1">
+                  Signed in as<br><strong class="text-dark">{{ current_user.email }}</strong>
+                  {% if current_user.role == 'admin' %}
+                    <span class="badge bg-danger ms-1">Admin</span>
+                  {% endif %}
+                </li>
+                {% if current_user.role == 'admin' %}
+                  <li>
+                    <a class="dropdown-item py-2 text-danger fw-semibold" href="{{ url_for('admin_dashboard') }}" id="nav-admin-link">
+                      <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                {% endif %}
+                <li>
+                  <a class="dropdown-item py-2" href="{{ url_for('orders') }}" id="nav-orders-link">
+                    <i class="bi bi-box-seam me-2"></i>My Orders
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item py-2" href="{{ url_for('profile') }}" id="nav-profile-link">
+                    <i class="bi bi-person-gear me-2"></i>My Profile
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item py-2 text-danger" href="{{ url_for('logout') }}" id="nav-logout-link">
+                    <i class="bi bi-box-arrow-right me-2"></i>Log Out
+                  </a>
+                </li>
+              </ul>
+            </div>
+          {% else %}
+            <a href="{{ url_for('login') }}" class="btn btn-outline-primary rounded-pill px-3" id="nav-login-btn">Log In</a>
+            <a href="{{ url_for('register') }}" class="btn btn-primary rounded-pill px-3" id="nav-register-btn">Sign Up</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages Alert Bar -->
+  <div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm rounded-3 d-flex align-items-center animate-fade-in" role="alert">
+            <i class="bi bi-{% if category == 'success' %}check-circle-fill{% elif category == 'danger' %}exclamation-triangle-fill{% elif category == 'warning' %}exclamation-circle-fill{% else %}info-circle-fill{% endif %} me-2 fs-5"></i>
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Body Content Block -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer-main">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon">
+              <i class="bi bi-bag-heart-fill"></i>
+            </div>
+            <h4 class="text-white mb-0">NovaStore</h4>
+          </div>
+          <p class="text-secondary small mb-3">
+            A complete Simple E-commerce Store web application built with Python Flask, SQLite/MySQL, HTML5, and Bootstrap. Designed for seamless shopping and intuitive store management.
+          </p>
+          <div class="d-flex gap-3 text-secondary fs-5">
+            <a href="#" class="text-secondary hover-primary"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-secondary hover-primary"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="text-secondary hover-primary"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-secondary hover-primary"><i class="bi bi-github"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-6">
+          <h5>Quick Links</h5>
+          <a href="{{ url_for('index') }}" class="footer-link">Home</a>
+          <a href="{{ url_for('products') }}" class="footer-link">All Products</a>
+          <a href="{{ url_for('cart') }}" class="footer-link">Shopping Cart</a>
+          <a href="{{ url_for('orders') }}" class="footer-link">Order Tracking</a>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-6">
+          <h5>Product Categories</h5>
+          {% for cat in global_categories[:4] %}
+            <a href="{{ url_for('products', category=cat) }}" class="footer-link">{{ cat }}</a>
+          {% endfor %}
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5>Store Support</h5>
+          <p class="small text-secondary mb-2"><i class="bi bi-geo-alt me-2 text-primary"></i> 100 Innovation Blvd, Tech Park</p>
+          <p class="small text-secondary mb-2"><i class="bi bi-envelope me-2 text-primary"></i> support@novastore.local</p>
+          <p class="small text-secondary mb-2"><i class="bi bi-telephone me-2 text-primary"></i> +1 (800) 555-0199</p>
+          <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 mt-2">
+            <i class="bi bi-shield-check me-1"></i> Secure 256-Bit SSL Checkout
+          </span>
+        </div>
+      </div>
+
+      <hr class="border-secondary opacity-25">
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center text-secondary small py-2">
+        <p class="mb-0">&copy; 2026 NovaStore Simple E-Commerce Store. Built for College Mini Project.</p>
+        <p class="mb-0">Powered by Flask & SQLite</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,149 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Dashboard Overview - NovaStore Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="h3 fw-bold mb-1">Store Dashboard Overview</h1>
+    <p class="text-muted small mb-0">Real-time performance metrics and recent customer order activity</p>
+  </div>
+  <a href="{{ url_for('admin_add_product') }}" class="btn btn-primary rounded-pill px-4" id="btn-admin-add-product-dash">
+    <i class="bi bi-plus-lg me-1"></i> Add New Product
+  </a>
+</div>
+
+<!-- Metrics Overview Row -->
+<div class="row g-3 mb-4">
+  <!-- Total Revenue -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="admin-card border-start border-primary border-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="admin-metric-label">Total Revenue</div>
+          <div class="admin-metric-value text-primary">₹{{ "%.2f"|format(total_revenue) }}</div>
+        </div>
+        <div class="brand-icon" style="background: var(--primary-light); color: var(--primary);">
+          <i class="bi bi-currency-rupee"></i>
+        </div>
+      </div>
+      <span class="text-muted small mt-2 d-block">Excluding cancelled orders</span>
+    </div>
+  </div>
+
+  <!-- Total Orders -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="admin-card border-start border-success border-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="admin-metric-label">Total Orders</div>
+          <div class="admin-metric-value text-success">{{ total_orders }}</div>
+        </div>
+        <div class="brand-icon" style="background: var(--success-bg); color: var(--success);">
+          <i class="bi bi-bag-check-fill"></i>
+        </div>
+      </div>
+      <span class="text-muted small mt-2 d-block">Placed across store lifetime</span>
+    </div>
+  </div>
+
+  <!-- Total Products -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="admin-card border-start border-info border-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="admin-metric-label">Active Products</div>
+          <div class="admin-metric-value text-info">{{ total_products }}</div>
+        </div>
+        <div class="brand-icon" style="background: #eff6ff; color: #2563eb;">
+          <i class="bi bi-box-seam-fill"></i>
+        </div>
+      </div>
+      <div class="mt-2 small">
+        {% if low_stock_count > 0 %}
+          <span class="text-warning fw-semibold"><i class="bi bi-exclamation-triangle-fill"></i> {{ low_stock_count }} items low in stock</span>
+        {% else %}
+          <span class="text-success small"><i class="bi bi-check2"></i> Stock levels healthy</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Registered Customers -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="admin-card border-start border-warning border-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <div class="admin-metric-label">Registered Customers</div>
+          <div class="admin-metric-value text-warning">{{ total_customers }}</div>
+        </div>
+        <div class="brand-icon" style="background: var(--warning-bg); color: var(--warning);">
+          <i class="bi bi-people-fill"></i>
+        </div>
+      </div>
+      <span class="text-muted small mt-2 d-block">Verified customer accounts</span>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Orders Table Section -->
+<div class="card border-0 rounded-4 shadow-sm bg-white overflow-hidden mb-4">
+  <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center border-bottom">
+    <h5 class="fw-bold mb-0">Recent Customer Orders</h5>
+    <a href="{{ url_for('admin_orders') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+      View All Orders <i class="bi bi-arrow-right ms-1"></i>
+    </a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="bg-light small text-muted text-uppercase">
+        <tr>
+          <th>Order #</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th class="text-end">Update Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if recent_orders %}
+          {% for ord in recent_orders %}
+            <tr>
+              <td class="fw-bold text-dark">#{{ ord.order_id }}</td>
+              <td>
+                <div class="fw-semibold text-dark">{{ ord.customer_name }}</div>
+                <span class="text-muted small">{{ ord.customer_email }}</span>
+              </td>
+              <td class="small text-muted">{{ ord.order_date }}</td>
+              <td class="fw-bold text-dark">₹{{ "%.2f"|format(ord.total_amount) }}</td>
+              <td>
+                <span class="status-badge status-{{ ord.status|lower }}">
+                  <span class="status-dot"></span> {{ ord.status }}
+                </span>
+              </td>
+              <td class="text-end">
+                <form action="{{ url_for('admin_update_order_status', order_id=ord.order_id) }}" method="POST" class="d-inline-flex align-items-center gap-1">
+                  <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="width: 130px;">
+                    <option value="Pending" {% if ord.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Shipped" {% if ord.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                    <option value="Delivered" {% if ord.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                    <option value="Cancelled" {% if ord.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                  </select>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="6" class="text-center py-4 text-muted">
+              No orders have been placed yet.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

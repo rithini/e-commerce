@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8a2387" />
+      <stop offset="100%" stop-color="#e94057" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="15" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGrad)" />
+
+  <!-- Ambient background glow circles -->
+  <circle cx="90" cy="90" r="110" fill="#f27121" opacity="0.18" filter="url(#glow)" />
+  <circle cx="320" cy="310" r="130" fill="#ffffff" opacity="0.08" filter="url(#glow)" />
+
+  <!-- Central Card Backdrop -->
+  <rect x="40" y="40" width="320" height="320" rx="28" fill="url(#cardGrad)" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.2" />
+
+  <!-- Category Tag -->
+  <rect x="65" y="65" width="105" height="26" rx="13" fill="#ffffff" opacity="0.15" />
+  <text x="117" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">ELECTRONICS</text>
+
+  <!-- Product Icon Graphic -->
+  <g>
+    
+            <circle cx="200" cy="200" r="70" fill="#2d3436" stroke="#e94057" stroke-width="5"/>
+            <circle cx="200" cy="200" r="55" fill="none" stroke="#f27121" stroke-width="2" stroke-dasharray="6,6"/>
+            <polygon points="205,170 188,202 201,202 195,230 215,195 201,195" fill="#f27121"/>
+        
+  </g>
+
+  <!-- Product Title Bar -->
+  <text x="200" y="325" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">Fast Wireless Charger</text>
+</svg>

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - NovaStore{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('cart') }}" class="text-decoration-none">Cart</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+    </ol>
+  </nav>
+
+  <h1 class="h2 fw-bold mb-4">Secure Checkout</h1>
+
+  <form action="{{ url_for('checkout') }}" method="POST" class="needs-validation" novalidate id="checkout-form">
+    <div class="row g-4">
+      <!-- Shipping & Payment Form Column -->
+      <div class="col-lg-7">
+        <!-- 1. Shipping Address Card -->
+        <div class="card border-0 rounded-4 shadow-sm bg-white p-4 mb-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon" style="width: 30px; height: 30px; font-size: 0.9rem;">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-0">1. Shipping Address</h4>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="shipping_name" class="form-label">Recipient Full Name *</label>
+              <input type="text" class="form-control" id="shipping_name" name="shipping_name" value="{{ user.name if user else '' }}" required placeholder="e.g. John Doe">
+              <div class="invalid-feedback">Please enter the recipient full name.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="shipping_phone" class="form-label">Phone Number *</label>
+              <input type="tel" class="form-control" id="shipping_phone" name="shipping_phone" value="{{ user.phone if user and user.phone else '' }}" required placeholder="e.g. +1 555-0199">
+              <div class="invalid-feedback">Please provide a contact phone number.</div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="shipping_email" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="shipping_email" value="{{ user.email if user else '' }}" readonly disabled>
+              <div class="form-text">Order receipt will be logged to this account.</div>
+            </div>
+
+            <div class="col-12">
+              <label for="shipping_address" class="form-label">Full Delivery Address *</label>
+              <textarea class="form-control" id="shipping_address" name="shipping_address" rows="3" required placeholder="House/Flat number, Street name, City, State, Postal Code">{{ user.address if user and user.address else '' }}</textarea>
+              <div class="invalid-feedback">Please enter the complete shipping address.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Payment Method Card -->
+        <div class="card border-0 rounded-4 shadow-sm bg-white p-4">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="brand-icon" style="width: 30px; height: 30px; font-size: 0.9rem;">
+              <i class="bi bi-credit-card-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-0">2. Payment Method</h4>
+          </div>
+
+          <div class="d-flex flex-column gap-3">
+            <div class="form-check p-3 border rounded-3 bg-light">
+              <input class="form-check-input" type="radio" name="payment_method" id="pay-cod" value="Cash on Delivery" checked>
+              <label class="form-check-label w-100 d-flex justify-content-between align-items-center" for="pay-cod">
+                <div>
+                  <strong class="d-block text-dark">Cash on Delivery (COD)</strong>
+                  <span class="text-muted small">Pay securely in cash or card upon delivery to your doorstep.</span>
+                </div>
+                <i class="bi bi-cash-coin fs-3 text-success"></i>
+              </label>
+            </div>
+
+            <div class="form-check p-3 border rounded-3 bg-light">
+              <input class="form-check-input" type="radio" name="payment_method" id="pay-card" value="Credit/Debit Card (Demo)">
+              <label class="form-check-label w-100 d-flex justify-content-between align-items-center" for="pay-card">
+                <div>
+                  <strong class="d-block text-dark">Credit / Debit Card (Demo Simulated)</strong>
+                  <span class="text-muted small">Instant electronic verification (Demo Sandbox)</span>
+                </div>
+                <i class="bi bi-credit-card fs-3 text-primary"></i>
+              </label>
+            </div>
+
+            <div class="form-check p-3 border rounded-3 bg-light">
+              <input class="form-check-input" type="radio" name="payment_method" id="pay-upi" value="UPI / Wallet">
+              <label class="form-check-label w-100 d-flex justify-content-between align-items-center" for="pay-upi">
+                <div>
+                  <strong class="d-block text-dark">UPI / Digital Wallet</strong>
+                  <span class="text-muted small">Google Pay, PhonePe, Apple Pay or Net Banking</span>
+                </div>
+                <i class="bi bi-phone fs-3 text-info"></i>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Review Column -->
+      <div class="col-lg-5">
+        <div class="order-summary-card">
+          <h4 class="fw-bold mb-3">Order Review ({{ cart_items|length }} items)</h4>
+
+          <!-- Items Mini List -->
+          <div class="mb-3 max-h-60 overflow-y-auto pe-1" style="max-height: 260px;">
+            {% for item in cart_items %}
+              <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                <div class="d-flex align-items-center gap-2">
+                  <img src="{{ url_for('static', filename='uploads/' + (item.image or 'default_product.jpg')) }}" alt="{{ item.name }}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover;">
+                  <div>
+                    <h6 class="mb-0 small fw-bold text-dark text-truncate" style="max-width: 180px;">{{ item.name }}</h6>
+                    <span class="text-muted small">Qty: {{ item.quantity }} × ₹{{ "%.2f"|format(item.price) }}</span>
+                  </div>
+                </div>
+                <span class="fw-bold text-dark small">₹{{ "%.2f"|format(item.subtotal) }}</span>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="summary-row">
+            <span>Items Subtotal</span>
+            <span class="fw-bold text-dark">₹{{ "%.2f"|format(subtotal) }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Estimated Shipping</span>
+            {% if shipping == 0 %}
+              <span class="text-success fw-bold">FREE</span>
+            {% else %}
+              <span class="fw-bold text-dark">₹{{ "%.2f"|format(shipping) }}</span>
+            {% endif %}
+          </div>
+
+          <div class="summary-total mb-4">
+            <span>Grand Total</span>
+            <span class="text-primary">₹{{ "%.2f"|format(grand_total) }}</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill shadow" id="btn-place-order">
+            <i class="bi bi-lock-fill me-2"></i> Confirm & Place Order
+          </button>
+
+          <p class="text-muted small text-center mt-3 mb-0">
+            By clicking Confirm, your order will be recorded in the store database and assigned a tracking ID.
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
